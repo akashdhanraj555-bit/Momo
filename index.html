@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Momo ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffeef2 0%, #ffd1dc 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Floating Hearts Background */
+        .heart-bg {
+            position: absolute;
+            font-size: 24px;
+            animation: floatUp 6s linear infinite;
+            opacity: 0.6;
+            bottom: -50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-110vh) translateX(var(--xs)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Card Container */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(244, 63, 94, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            z-index: 10;
+            border: 2px solid #ffb6c1;
+            transition: all 0.5s ease;
+        }
+
+        h2 {
+            color: #d93856;
+            font-size: 22px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Buttons */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 16px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #ff477e;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 71, 126, 0.4);
+        }
+
+        .btn-primary:hover {
+            background-color: #ff2a65;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: #555;
+            position: relative;
+        }
+
+        /* Input for step 5 */
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #ffb6c1;
+            resize: none;
+            font-size: 15px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #ff477e;
+        }
+
+        .final-text {
+            font-size: 18px;
+            color: #b31b38;
+            font-style: italic;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- Step 1: Welcome Intro -->
+        <div class="step active" id="step1">
+            <h2>Im sorry momo im to busy in these days but I love you so much <br><br><span style="font-size: 16px; color: #666;">( acha kuch baat krni hai )</span></h2>
+            <div class="btn-container">
+                <button class="btn-primary" onclick="nextStep(2)">Continue</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Movie Question -->
+        <div class="step" id="step2">
+            <h2>mere sath movie dekhne chlogi ?</h2>
+            <div class="btn-container" style="position: relative; min-height: 60px;">
+                <button class="btn-primary" id="yesBtn1" onclick="triggerSpecialHearts(); nextStep(3)">Yes</button>
+                <button class="btn-secondary" id="noBtn1">No</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Angry Question -->
+        <div class="step" id="step3">
+            <h2>tum mujhse gussa ho momiya</h2>
+            <div class="btn-container">
+                <button class="btn-primary" onclick="nextStep(4)">Yes</button>
+                <button class="btn-secondary" onclick="nextStep(4)">No</button>
+            </div>
+        </div>
+
+        <!-- Step 4: When to go -->
+        <div class="step" id="step4">
+            <h2>movie dekhne kb chle</h2>
+            <div class="btn-container">
+                <button class="btn-primary" onclick="nextStep(5)">25th Thursday</button>
+                <button class="btn-primary" onclick="nextStep(5)">27th Saturday</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Why Angry -->
+        <div class="step" id="step5">
+            <h2>momo tu mere se itni gussa kyu hai</h2>
+            <textarea id="momoReason" placeholder="Yahan likho na..."></textarea>
+            <div class="btn-container">
+                <button class="btn-primary" onclick="nextStep(6)">Submit</button>
+            </div>
+        </div>
+
+        <!-- Step 6: Final Screen -->
+        <div class="step" id="step6">
+            <h2 style="font-size: 26px;">❤️</h2>
+            <p class="final-text">sorry momo im not perfect but I love you alot and you are the unreplaceable part of my life</p>
+        </div>
+    </div>
+
+    <script>
+        // Continuous background hearts flow
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-bg');
+            heart.innerText = ['❤️', '💖', '💝', '💕'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.setProperty('--xs', (Math.random() * 100 - 50) + "px");
+            heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+            heart.style.fontSize = (Math.random() * 15 + 15) + "px";
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+        setInterval(createHeart, 300);
+
+        // Step Navigation
+        function nextStep(stepNum) {
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            document.getElementById('step' + stepNum).classList.add('active');
+        }
+
+        // Special hearts burst when clicking 'Yes'
+        function triggerSpecialHearts() {
+            for(let i=0; i<30; i++) {
+                setTimeout(createHeart, i * 50);
+            }
+        }
+
+        // Evasive 'No' Button Logic (Handles both Desktop & Mobile)
+        const noBtn = document.getElementById('noBtn1');
+        
+        function moveNoButton() {
+            const card = document.querySelector('.card');
+            const cardRect = card.getBoundingClientRect();
+            
+            // Generate random position inside the card boundaries to avoid flying off screen
+            const maxX = cardRect.width - noBtn.offsetWidth - 20;
+            const maxY = cardRect.height - noBtn.offsetHeight - 20;
+            
+            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        noBtn.addEventListener('mouseenter', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevents accidental click on mobile touch
+            moveNoButton();
+        });
+    </script>
+</body>
+</html>
